@@ -1,11 +1,14 @@
-.App {
-  text-align: center;
-}
+ .app{
+  padding:0% 7%;
+ }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+ *{
+  transition: ease-in-out;
+  transition-duration: 500ms;
+  
+ }
+
+ 
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
