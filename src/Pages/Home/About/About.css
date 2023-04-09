@@ -1,0 +1,19 @@
+.hero{
+    margin:5%  0%
+
+}
+
+.hero .person-img{
+    width: 450px;
+    height: 500px  ;
+}
+
+.hero .parts-img {
+    width: 320px;
+    height: 300px;
+    right: 23%;
+    top:49%;
+    Corner-radius: 10px
+   
+
+}
