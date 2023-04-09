@@ -24,12 +24,31 @@ const Orders = () => {
     }
   };
 
-  console.log(orders);
   useEffect(() => {
     fetch(`http://localhost:5000/orders?email=${user?.email}`)
       .then((res) => res.json())
       .then((data) => setOrders(data));
   }, [user?.email]);
+
+  const handleStatusUpdate = (id) => {
+    fetch(`http://localhost:5000/update/${id}`, {
+        method: "PATCH",
+        headers:{
+            'content-type':'application/json'
+        },
+        body:JSON.stringify({status:'Approved'})
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.acknowledged){
+        const remaining=orders.filter(odr=>odr._id!==id);
+        const approving=orders.find(odr=>odr._id===id);
+        const newOrder=[approving,...remaining];
+        approving.status='Approved';
+        setOrders(newOrder)
+        }
+      })
+  };
 
   return (
     <div>
@@ -74,7 +93,9 @@ const Orders = () => {
                     aria-hidden
                     className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
                   />
-                  <span className="relative text-xs">Pending</span>
+                  <button onClick={()=>handleStatusUpdate(order?._id)} className="relative text-xs">
+                    {order?.status ? order?.status : "Pending"}
+                  </button>
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
