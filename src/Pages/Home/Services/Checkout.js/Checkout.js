@@ -4,20 +4,22 @@ import { userContext } from "../../../../AuthContext/AuthContext";
 
 const Checkout = () => {
   const data = useLoaderData();
-  
+
   const { user } = useContext(userContext);
-   
 
   const handlePlaceOrder = (event) => {
     event.preventDefault();
     const form = event.target;
+    const img = data?.img;
     const serviceName = form.serviceName.value;
     const servicePrice = form.price.value;
     const serviceCategory = form.serviceCategory.value;
     const serviceDescription = form.description.value;
-    const email=form.email.value;
+    const email = form.email.value;
+
     const placeOrderData = {
-       userEmail:email,
+      img: img,
+      userEmail: email,
       serviceName: serviceName,
       servicePrice: servicePrice,
       serviceCategory: serviceCategory,
@@ -29,15 +31,15 @@ const Checkout = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body:JSON.stringify(placeOrderData)
+      body: JSON.stringify(placeOrderData),
     })
-    .then(res=>res.json())
-    .then(data=>{
-      if(data.acknowledged){
-        form.reset();
-        alert('Your data has successfully submited to Mongodb Database')
-      }
-    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.acknowledged) {
+          form.reset();
+          alert("Your data has successfully submited to Mongodb Database");
+        }
+      });
   };
   return (
     <div className="max-w-md mx-auto mt-8 bg-white p-6 rounded-md shadow-md my-10">
@@ -58,14 +60,13 @@ const Checkout = () => {
             placeholder="Enter service name"
             name="serviceName"
           />
-          
         </div>
         <div className="mb-4">
           <label
             className="block text-gray-700 font-bold mb-2"
             htmlFor="service_name"
           >
-             Enter Email
+            Enter Email
           </label>
           <input
             className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -75,7 +76,6 @@ const Checkout = () => {
             placeholder="Enter service name"
             name="email"
           />
-
         </div>
         <div className="mb-4">
           <label

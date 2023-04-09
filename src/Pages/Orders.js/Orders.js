@@ -3,13 +3,26 @@ import { userContext } from "../../AuthContext/AuthContext";
 
 const Orders = () => {
   const { user } = useContext(userContext);
-  const [orders, setOrders] = useState({});
+  const [orders, setOrders] = useState([]);
 
- 
-  const handleOrderDelete=()=>{
-    
-  }
+  const handleOrderDelete = (or) => {
+    const agree = window.confirm(
+      `Are you sure delete ${or?.serviceName}  order?`
+    );
 
+    if (agree) {
+      fetch(`http://localhost:5000/delete/order/${or?._id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          const remainingOrders = orders.filter(
+            (order) => order._id !== or._id
+          );
+          setOrders(remainingOrders);
+        });
+    }
+  };
 
   console.log(orders);
   useEffect(() => {
@@ -45,7 +58,8 @@ const Orders = () => {
                 <div className="flex items-center">
                   <div className="flex-shrink-0 h-10 w-10"></div>
                   <div className="ml-4">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="flex items-center  gap-1.5 text-sm font-medium text-gray-900">
+                      <img src={order?.img} alt="" className="w-1/5 " />
                       <h1>{order?.serviceName}</h1>
                     </div>
                   </div>
@@ -64,7 +78,10 @@ const Orders = () => {
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <button  className="flex items-center justify-center bg-tomato hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                <button
+                  onClick={() => handleOrderDelete(order)}
+                  className="flex items-center justify-center bg-tomato hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                >
                   <svg
                     className="h-6 w-6 text-black"
                     fill="none"
