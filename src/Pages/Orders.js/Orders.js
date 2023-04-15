@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../../AuthContext/AuthContext";
 
 const Orders = () => {
-  const { user } = useContext(userContext);
+  const { user,  } = useContext(userContext);
   const [orders, setOrders] = useState([]);
 
   const handleOrderDelete = (or) => {
@@ -11,7 +11,7 @@ const Orders = () => {
     );
 
     if (agree) {
-      fetch(`http://localhost:5000/delete/order/${or?._id}`, {
+      fetch(`https://car-doctor-server-seven.vercel.app/delete/order/${or?._id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
@@ -25,13 +25,23 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:5000/orders?email=${user?.email}`)
-      .then((res) => res.json())
+    fetch(`https://car-doctor-server-seven.vercel.app/orders?email=${user?.email}`,{
+      headers:{
+        authorization:`Bearer ${localStorage.getItem('CarDoctorToken')}`
+      }
+    })
+      .then((res) => {
+        if(res.status===401 ||res.status===403){
+          //  return logOut().then().catch(err=>console.log(err))
+          return console.log('logOuting')
+        }
+        return res.json()
+      })
       .then((data) => setOrders(data));
   }, [user?.email]);
 
   const handleStatusUpdate = (id) => {
-    fetch(`http://localhost:5000/update/${id}`, {
+    fetch(`https://car-doctor-server-seven.vercel.app/update/${id}`, {
         method: "PATCH",
         headers:{
             'content-type':'application/json'
@@ -49,10 +59,11 @@ const Orders = () => {
         }
       })
   };
-
+     // console.log(orders)
   return (
     <div>
-      <h3>User order {orders.length}</h3>
+      <h3>User order {orders?.length}</h3>
+      
       <table className="border-collapse w-full my-40">
         <thead>
           <tr>
@@ -70,8 +81,8 @@ const Orders = () => {
             </th>
           </tr>
         </thead>
-        {orders.map((order) => (
-          <tbody>
+        {orders?.map((order) => (
+          <tbody key={order?._id}>
             <tr className="hover:bg-gray-100 border-b border-gray-200 py-10">
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div className="flex items-center">

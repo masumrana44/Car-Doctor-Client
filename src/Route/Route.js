@@ -21,17 +21,18 @@ const router = createBrowserRouter([
         path: "/services/details/:id",
         element: <ServicesDetails />,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/specificservices/${params.id}`),
+          fetch(
+            `https://car-doctor-server-seven.vercel.app/specificservices/${params.id}`
+          ),
       },
       {
         path: "/login",
         element: <Login />,
       },
       {
-        path:"/register",
-        element:<Register/>
-      }
-      ,
+        path: "/register",
+        element: <Register />,
+      },
       {
         path: "/checkbox/:id",
         element: (
@@ -40,12 +41,18 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/specificservices/${params.id}`),
+          fetch(
+            `https://car-doctor-server-seven.vercel.app/specificservices/${params.id}`
+          ),
       },
       {
-        path:'/orders',
-        element:<PrivateRoute><Orders/></PrivateRoute>
-      }
+        path: "/orders",
+        element: (
+          <PrivateRoute>
+            <Orders />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
 ]);

@@ -6,7 +6,8 @@ import { FaPushed, FaYoutube } from "react-icons/fa";
 
 const ServicesDetails = () => {
   const data = useLoaderData();
-  console.log(data);
+  // console.log(data);
+  console.log(data)
   return (
     <div>
       <header className="sd-header-banner mb-10 relative ">

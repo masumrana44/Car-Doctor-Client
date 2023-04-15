@@ -26,7 +26,7 @@ const Checkout = () => {
       serviceDescription: serviceDescription,
     };
 
-    fetch("http://localhost:5000/insert/order", {
+    fetch("https://car-doctor-server-seven.vercel.app/insert/order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

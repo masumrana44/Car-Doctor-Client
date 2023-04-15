@@ -7,9 +7,9 @@ import { userContext } from "../../AuthContext/AuthContext";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const { loginWithGoogle, logOut, loginWithEmPass } = useContext(userContext);
   const from = location.state?.from?.pathname || "/";
+  const { loginWithGoogle, logOut, loginWithEmPass } = useContext(userContext);
+
 
   // Login With Email Pasword
   const handleLoginEmPass = (event) => {
@@ -21,7 +21,9 @@ const Login = () => {
     loginWithEmPass(email, password)
       .then((res) => {
         const user = res.user;
+
         form.reset();
+        navigate(from, { replace: true });
       })
       .catch((err) => console.log(err.message));
   };
@@ -31,7 +33,29 @@ const Login = () => {
     loginWithGoogle()
       .then((result) => {
         const user = result.user;
-        navigate(from, { replace: true });
+        const currentUser={
+          email:user.email
+        }
+         
+        // get jwt token 
+        fetch('https://car-doctor-server-seven.vercel.app/jwt',{
+          method:'POST',
+         headers:{
+          'content-type':'application/json'
+         },
+         body:JSON.stringify(currentUser)
+        }
+        )
+        .then(res=>res.json())
+        .then(data=>{
+          // console.log(data);
+          // localStorage is not the best place to store jwt token 
+          localStorage.setItem('CarDoctorToken',data.token);
+          navigate(from, { replace: true })
+
+        })
+
+       
       })
       .catch((err) => console.error(err));
   };
@@ -40,7 +64,7 @@ const Login = () => {
     logOut()
       .then(() => {})
       .catch((error) => {
-        console.stack(error);
+        console.log(error);
       });
   };
   return (
